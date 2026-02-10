@@ -24,6 +24,12 @@ router.get('/:id', async (req, res) => {
 
         console.log(result)
 
+        if (!result) {
+            // no drivers match the ID
+            res.status(404).json()
+            return
+        }
+
         res.status(200).json(result)
         return
 
@@ -109,7 +115,13 @@ router.put('/:id', async (req, res) => {
         // SQL: UPDATE drivers SET driverName = ?, birthDate = ? WHERE id = ?;
         const result = await db.Driver.update({ driverName, birthDate }, { where: { id: driverId } })
 
+        console.log("UPDATE RESULT:")
         console.log(result)
+        if (result[0] == 0) {
+            // no records in the DB were updated
+            res.status(404).json()
+            return
+        }
 
         res.status(204).json()
         return
@@ -141,11 +153,17 @@ router.delete('/:id', async (req, res) => {
         console.log(`Try execute the DELETE operation on the DB.`)
         const result = await db.Driver.destroy({ where: { id: driverId } })
 
+        console.log("DELETE RESULT:")
         console.log(result)
     
         // determine if the deletion was successful
         // was there 1 row affected, or 0 rows affected, or more than 1 row affected (shouldn't be possible)
-    
+        if (!result) {
+            // no rows affected
+            res.status(404).json()
+            return
+        }
+
         res.status(204).json()
         return
 
