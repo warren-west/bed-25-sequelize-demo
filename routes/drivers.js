@@ -20,7 +20,7 @@ router.get('/:id', async (req, res) => {
     }
 
     try {
-        const result = await db.Driver.findByPk(driverId)
+        const result = await db.Driver.findByPk(driverId, { include: db.Team })
 
         console.log(result)
 
@@ -43,17 +43,17 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     // add a driver
     // get the new driver details from the req.body 
-    const { driverName, birthDate } = req.body
+    const { driverName, birthDate, teamId } = req.body
 
     // basic validation (the values from the body aren't null / undefined / empty)
-    if (!driverName || !birthDate) {
+    if (!driverName || !birthDate || !teamId) {
         console.log(`One or more input values are invalid.`)
         res.status(400).json({ message: "One or more input values are invalid." })
     }
 
     // Now, with valid values, create a new Driver in the DB.
     try {
-        const result = await db.Driver.create({ driverName, birthDate })
+        const result = await db.Driver.create({ driverName, birthDate, teamId })
 
         console.log(result) // the newly created driver
 
@@ -100,10 +100,10 @@ router.put('/:id', async (req, res) => {
 
     // get the driverId, and the driver details from the req.body
     const driverId = req.params.id
-    const { driverName, birthDate } = req.body
+    const { driverName, birthDate, teamId } = req.body
 
     // validation
-    if (isNaN(driverId) || !driverId || !isNaN(driverName) || !driverName) {
+    if (isNaN(driverId) || !driverId || !isNaN(driverName) || !driverName || isNaN(teamId)) {
         // we have some invalid value(s)
         console.log("Invalid input values")
         res.status(400).json({ message: "Please provide valid values for the driver." })
@@ -113,7 +113,7 @@ router.put('/:id', async (req, res) => {
     // we have valid input values
     try {
         // SQL: UPDATE drivers SET driverName = ?, birthDate = ? WHERE id = ?;
-        const result = await db.Driver.update({ driverName, birthDate }, { where: { id: driverId } })
+        const result = await db.Driver.update({ driverName, birthDate, teamId }, { where: { id: driverId } })
 
         console.log("UPDATE RESULT:")
         console.log(result)
