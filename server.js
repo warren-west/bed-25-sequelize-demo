@@ -46,6 +46,7 @@ const server = express()
 const driversRouter = require('./routes/drivers')
 const teamsRouter = require('./routes/teams')
 const circuitsRouter = require('./routes/circuits')
+const racesRouter = require('./routes/races')
 
 // middleware
 server.use(express.json()) // allow reading JSON data from req.body
@@ -54,6 +55,7 @@ server.use(express.json()) // allow reading JSON data from req.body
 server.use('/drivers', driversRouter)
 server.use('/teams', teamsRouter)
 server.use('/circuits', circuitsRouter)
+server.use('/races', racesRouter)
 
 // Determine the port for the server
 const port = process.env.PORT || '3000'

@@ -1,0 +1,14 @@
+[
+    {
+        "queryId": 1,
+        "sqlCommand": "INSERT INTO drivers (driverName, birthDate, teamId) VALUES ('Lewis', '1996-04-30', 12);"
+    },
+    {
+        "queryId": 2,
+        "sqlCommand": "INSERT INTO drivers (driverName, birthDate, teamId) VALUES ('Lewis', '1996-04-30', 12);"
+    },
+    {
+        "queryId": 3,
+        "sqlCommand": "INSERT INTO drivers (driverName, birthDate, teamId) VALUES ('Lewis', '1996-04-30', 12);"
+    }
+]

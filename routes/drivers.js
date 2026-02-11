@@ -10,6 +10,8 @@ router.get('/', async (req, res) => {
     res.json({ data: results })
 })
 
+// GET /drivers/:id
+// Returns a single driver, including the related Team data
 router.get('/:id', async (req, res) => {
     const driverId = req.params.id
 
@@ -20,7 +22,8 @@ router.get('/:id', async (req, res) => {
     }
 
     try {
-        const result = await db.Driver.findByPk(driverId, { include: db.Team })
+        // We can add associations by assigning an array to the "includes" property
+        const result = await db.Driver.findByPk(driverId, { include: [db.Team, db.Circuit] })
 
         console.log(result)
 
@@ -83,8 +86,8 @@ router.post('/populate', async (req, res) => {
         console.log(item.driverName)
         console.log(item.birthDate)
         // ALWAYS perform raw queries on the sequelize object, NOT on models:
-        await db.sequelize.query("INSERT INTO drivers (driverName, birthDate) VALUES (?, ?);",
-            [ item.driverName, item.birthDate ]
+        await db.sequelize.query("INSERT INTO drivers (driverName, birthDate, teamId) VALUES (?, ?, ?);",
+            [ item.driverName, item.birthDate, item.teamId ]
         )
     }
 
