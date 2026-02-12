@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formula 1 | Teams</title>
+</head>
+<body>
+    <%- include('./partials/navbar.ejs') %>
+    <h1>Teams</h1>
+
+    <ul>
+        <% teams.forEach(t => { %>
+            <a href="/teams/<%= t.id %>">
+                <li value="<%= t.id %>">Name: <%= t.teamName %></li>
+            </a>
+        <% }) %>
+    </ul>
+
+    <div>
+        <h4>Add new team</h4>
+        <form action="/teams" method="post">
+            <label>Team name:</label>
+            <input name="teamName" type="text" placeholder="New team name...">
+            <button type="submit">Add Team</button>
+        </form>
+    </div>
+</body>
+</html>

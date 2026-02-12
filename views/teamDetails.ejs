@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formula 1 | Teams | <%= team.teamName %>
+    </title>
+</head>
+
+<body>
+    <%- include('./partials/navbar') %>
+        <h1>
+            <%= team.teamName %>
+        </h1>
+
+        <% if (team.drivers==0) { %>
+            <p><i>Team currently has no drivers...</i></p>
+            <% } else {%>
+                <ul>
+                    <% team.drivers.forEach(d=> { %>
+                        <li><a href="/drivers/<%= d.id %>">
+                                <%= d.driverName %>
+                            </a><b></b> (<%= d.birthDate %>)</li>
+                        <% }) %>
+                </ul>
+                <% } %>
+
+                    <div>
+                        <h4>Delete Team:</h4>
+                        <button onclick="deleteOrUpdateFunction('/teams/<%= team.id %>', 'delete')">Delete <%= team.teamName %></button>
+                    </div>
+
+                    <script src="/js/custom.js"></script>
+</body>
+
+</html>

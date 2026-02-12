@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const { where } = require('sequelize')
 const db = require('../models')
 
 // Note: the .route() function lets you do this:
@@ -14,7 +15,8 @@ router.get('/', async (req, res) => {
     // get teams
     const results = await db.Team.findAll({})
 
-    res.json({ data: results })
+    // res.json({ data: results })
+    res.render('teams', { teams: results })
 })
 
 router.get('/:id', async (req, res) => {
@@ -38,7 +40,8 @@ router.get('/:id', async (req, res) => {
         }
 
         // return a success response
-        res.json(result)
+        res.render('teamDetails', { team: result })
+        // res.json(result)
         return
 
     } catch (error) {
@@ -50,7 +53,25 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     // add a team
-    // Can copy & paste using the Driver route as a template
+    const { teamName } = req.body
+
+    if (!teamName) {
+        // deal with a error 400
+        res.redirect('/teams')
+        return
+    }
+
+    try {
+        const result = await db.Team.create({ teamName })
+
+        res.redirect('/teams')
+        return
+
+    } catch (error) {
+        // catch the error 500
+        res.redirect('/teams')
+        return
+    }
 })
 
 router.post('/populate', async (req, res) => {
@@ -65,7 +86,7 @@ router.put('/:id', async (req, res) => {
     // update a team by ID
     const teamId = req.params.id
     const { teamName } = req.body
-    
+
     // validate the teamId & teamName
     if (isNaN(teamId) || !teamName) {
         // invalid input details
@@ -81,7 +102,7 @@ router.put('/:id', async (req, res) => {
             res.status(404).json({ message: `Team with the id = ${teamId} does not exist.` })
             return
         }
-        
+
         // A successful update()
         res.status(204).json()
         return
@@ -92,9 +113,37 @@ router.put('/:id', async (req, res) => {
     }
 })
 
-router.delete('/', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     // delete a team by ID
-    // Can copy & paste using the Driver route as a template
+    const teamId = req.params.id
+
+    // validate Id
+    if (isNaN(teamId)) {
+        // handle the 400 error
+        res.status(400).json({ error: `Team ID = ${teamId} is not valid, it needs to be a number.` })
+        return
+    }
+
+    try {
+        const result = await db.Team.destroy({ where: { id: teamId } })
+        console.log(result)
+
+        // check how many rows were affected to deal with a 404 error
+        if (!result) {
+            console.log("TEST 404 PING")
+            // 404
+            res.status(404).json({ error: `Team with ID = ${teamId} does not exist.` })
+            return
+        }
+        
+        // successful 200
+        res.json()
+        return
+        
+    } catch (error) {
+        res.status(500).json({ error: `Server error.` })
+        return
+    }
 })
 
 module.exports = router

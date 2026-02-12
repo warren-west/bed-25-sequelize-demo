@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formula 1 | Drivers</title>
+</head>
+<body>
+    <%- include('./partials/navbar.ejs') %>
+    <h1>Drivers</h1>
+
+    <ul>
+        <% drivers.forEach(d => { %>
+            <li><a href="/drivers/<%= d.id %>"><%= d.driverName %></a><b></b> (<%= d.birthDate %>)</li>
+        <% }) %>
+    </ul>
+</body>
+</html>

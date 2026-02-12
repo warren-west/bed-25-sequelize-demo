@@ -41,6 +41,7 @@ db.sequelize.sync({ alter: true })
 
 const express = require('express')
 const server = express()
+const path = require('path')
 
 // import routes
 const driversRouter = require('./routes/drivers')
@@ -50,6 +51,10 @@ const racesRouter = require('./routes/races')
 
 // middleware
 server.use(express.json()) // allow reading JSON data from req.body
+server.use(express.urlencoded({ extended: false }))
+server.use(express.static(path.join(__dirname, 'public'))) // use the "public" folder
+server.set("view engine", "ejs")
+server.set('views', path.join(__dirname, 'views'))
 
 // connect the routes
 server.use('/drivers', driversRouter)

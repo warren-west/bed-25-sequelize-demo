@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formula 1 | Drivers | <%= driver.driverName %></title>
+</head>
+<body>
+    <%- include('./partials/navbar') %>
+    <h1><%= driver.driverName %></h1>
+    <% if (driver.team) { %>
+        <p>Rides for: <%= driver.team.teamName %></p>
+    <% } else { %>
+        <p><i>Driver is not associated with a team yet...</i></p>
+    <% } %>
+
+    <h3>Circuits raced:</h3>
+    <% if (driver.circuits.length == 0) { %>
+        <p><i>Driver has not raced on any circuits...</i></p>
+    <% } else {%>
+        <ul>
+            <% driver.circuits.forEach(c => { %>         
+                <li><a href="/circuits/<%= c.id %>"><%= c.circuitName %></a>: finished in position <%= c.driver_circuits.position %></li>
+            <% }) %>
+        </ul>
+    <% } %>
+</body>
+</html>

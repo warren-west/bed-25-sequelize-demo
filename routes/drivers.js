@@ -7,7 +7,8 @@ router.get('/', async (req, res) => {
     // get drivers
     const results = await db.Driver.findAll({})
     
-    res.json({ data: results })
+    // res.json({ data: results })
+    res.render('drivers', { drivers: results })
 })
 
 // GET /drivers/:id
@@ -33,7 +34,8 @@ router.get('/:id', async (req, res) => {
             return
         }
 
-        res.status(200).json(result)
+        // res.status(200).json(result)
+        res.render('driverDetails', { driver: result })
         return
 
     } catch (error) {
