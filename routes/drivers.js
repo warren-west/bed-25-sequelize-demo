@@ -1,11 +1,12 @@
-const express = require('express')
+const router = require('express').Router()
 const db = require('../models')
-const router = express.Router()
+const DriverService = require('../services/DriverService')
+const driverService = new DriverService(db)
 
 // GET /drivers -> returns all the drivers from the DB
 router.get('/', async (req, res) => {
     // get drivers
-    const results = await db.Driver.findAll({})
+    const results = await driverService.getAllDrivers()
     
     res.json({ data: results })
 })
@@ -23,7 +24,7 @@ router.get('/:id', async (req, res) => {
 
     try {
         // We can add associations by assigning an array to the "includes" property
-        const result = await db.Driver.findByPk(driverId, { include: [db.Team, db.Circuit] })
+        const result = await driverService.getDriverById(driverId)
 
         console.log(result)
 
@@ -56,7 +57,7 @@ router.post('/', async (req, res) => {
 
     // Now, with valid values, create a new Driver in the DB.
     try {
-        const result = await db.Driver.create({ driverName, birthDate, teamId })
+        const result = await driverService.createDriver({ driverName, birthDate, teamId })
 
         console.log(result) // the newly created driver
 
@@ -116,7 +117,7 @@ router.put('/:id', async (req, res) => {
     // we have valid input values
     try {
         // SQL: UPDATE drivers SET driverName = ?, birthDate = ? WHERE id = ?;
-        const result = await db.Driver.update({ driverName, birthDate, teamId }, { where: { id: driverId } })
+        const result = await driverService.updateDriver(driverId, { driverName, birthDate, teamId })
 
         console.log("UPDATE RESULT:")
         console.log(result)
@@ -154,7 +155,7 @@ router.delete('/:id', async (req, res) => {
     // we have a valid driverId
     try {
         console.log(`Try execute the DELETE operation on the DB.`)
-        const result = await db.Driver.destroy({ where: { id: driverId } })
+        const result = driverService.deleteDriver(driverId)
 
         console.log("DELETE RESULT:")
         console.log(result)
