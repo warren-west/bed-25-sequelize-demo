@@ -1,6 +1,6 @@
 const router = require('express').Router()
-const { where } = require('sequelize')
 const db = require('../models')
+const { requireLoggedInUser, requireAdminUser } = require('../middleware/authMiddleware')
 
 // Note: the .route() function lets you do this:
 // router.route('/')
@@ -16,10 +16,10 @@ router.get('/', async (req, res) => {
     const results = await db.Team.findAll({})
 
     // res.json({ data: results })
-    res.render('teams', { teams: results })
+    res.render('teams', { teams: results, currentUser: req.user })
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', requireLoggedInUser, async (req, res) => {
     // get the teamId from the req.params
     const teamId = req.params.id
 
@@ -40,7 +40,7 @@ router.get('/:id', async (req, res) => {
         }
 
         // return a success response
-        res.render('teamDetails', { team: result })
+        res.render('teamDetails', { team: result, currentUser: req.user })
         // res.json(result)
         return
 
@@ -51,7 +51,8 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-router.post('/', async (req, res) => {
+
+router.post('/', requireAdminUser, async (req, res) => {
     // add a team
     const { teamName } = req.body
 
@@ -82,7 +83,7 @@ router.post('/populate', async (req, res) => {
     res.status(201).json({ message: "Database has been populated with teams." })
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', requireAdminUser, async (req, res) => {
     // update a team by ID
     const teamId = req.params.id
     const { teamName } = req.body
@@ -113,7 +114,7 @@ router.put('/:id', async (req, res) => {
     }
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', requireAdminUser, async (req, res) => {
     // delete a team by ID
     const teamId = req.params.id
 

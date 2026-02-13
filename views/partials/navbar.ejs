@@ -11,4 +11,15 @@
     <ul>
         <li><a href="/circuits">Circuits</a></li>
     </ul>
+    <ul>
+        <% if (!currentUser) { %>
+            <li><a href="/login">Login</a></li>
+            <% } else { %>
+                <li>
+                    <form action="/login/logout" method="post">
+                        <button>Logout</button>
+                    </form>
+                </li>
+        <% } %>
+    </ul>
 </nav>

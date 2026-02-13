@@ -14,5 +14,31 @@
             <li><a href="/drivers/<%= d.id %>"><%= d.driverName %></a><b></b> (<%= d.birthDate %>)</li>
         <% }) %>
     </ul>
+
+
+    <% if (currentUser?.roleId === 1) { %>
+        <div>
+            <form action="/drivers" method="post">
+                <label>Name: </label>
+                <input type="text" name="driverName" placeholder="Driver name...">
+                
+                <label>Birth Date:</label>
+                <input type="date" name="birthDate">
+                
+                
+                <% if (teams.length !== 0) { %>
+                    <select name="teamId">
+                        <% teams.forEach(t => { %>
+                            <option value="<%= t.id %>"><%= t.teamName %></option>
+                        <% }) %>
+                    </select>
+                <% } else { %>
+                    <p><i>There are no teams to select from...</i></p>
+                <% } %>
+    
+                <button type="submit">Add Driver</button>
+            </form>
+        </div>
+    <% } %>
 </body>
 </html>

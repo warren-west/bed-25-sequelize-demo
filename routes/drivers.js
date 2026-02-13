@@ -1,19 +1,21 @@
 const express = require('express')
 const db = require('../models')
 const router = express.Router()
+const { requireLoggedInUser, requireAdminUser } = require('../middleware/authMiddleware')
 
 // GET /drivers -> returns all the drivers from the DB
 router.get('/', async (req, res) => {
     // get drivers
     const results = await db.Driver.findAll({})
+    const teams = await db.Team.findAll()
     
     // res.json({ data: results })
-    res.render('drivers', { drivers: results })
+    res.render('drivers', { drivers: results, teams: teams, currentUser: req.user })
 })
 
 // GET /drivers/:id
 // Returns a single driver, including the related Team data
-router.get('/:id', async (req, res) => {
+router.get('/:id', requireLoggedInUser, async (req, res) => {
     const driverId = req.params.id
 
     if (isNaN(driverId) || !driverId) {
@@ -35,7 +37,7 @@ router.get('/:id', async (req, res) => {
         }
 
         // res.status(200).json(result)
-        res.render('driverDetails', { driver: result })
+        res.render('driverDetails', { driver: result, currentUser: req.user })
         return
 
     } catch (error) {
@@ -45,10 +47,15 @@ router.get('/:id', async (req, res) => {
 })
 
 // POST / drivers
-router.post('/', async (req, res) => {
+router.post('/', requireAdminUser, async (req, res) => {
     // add a driver
     // get the new driver details from the req.body 
     const { driverName, birthDate, teamId } = req.body
+
+    console.log(driverName)
+    console.log(birthDate)
+    console.log(teamId)
+    console.log("teamId is:", typeof teamId)
 
     // basic validation (the values from the body aren't null / undefined / empty)
     if (!driverName || !birthDate || !teamId) {
@@ -63,6 +70,7 @@ router.post('/', async (req, res) => {
         console.log(result) // the newly created driver
 
         res.status(201).json({ message: "New driver created.", data: result })
+        // redirect to the /drivers page
         return
 
     } catch (error) {
@@ -100,7 +108,7 @@ router.post('/populate', async (req, res) => {
 })
 
 // PUT /drivers/:id
-router.put('/:id', async (req, res) => {
+router.put('/:id', requireAdminUser, async (req, res) => {
     // update a driver by ID
 
     // get the driverId, and the driver details from the req.body
@@ -140,7 +148,7 @@ router.put('/:id', async (req, res) => {
 })
 
 // DELETE /drivers/:id
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', requireAdminUser, async (req, res) => {
     // delete a driver by ID
     const driverId = req.params.id
     console.log('DRIVER ID ' + driverId)

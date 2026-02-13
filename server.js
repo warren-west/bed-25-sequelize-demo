@@ -40,6 +40,8 @@ db.sequelize.sync({ alter: true })
     })
 
 const express = require('express')
+const session = require('express-session')
+const passport = require('passport')
 const server = express()
 const path = require('path')
 
@@ -48,11 +50,19 @@ const driversRouter = require('./routes/drivers')
 const teamsRouter = require('./routes/teams')
 const circuitsRouter = require('./routes/circuits')
 const racesRouter = require('./routes/races')
+const authRouter = require('./routes/auth')
 
 // middleware
 server.use(express.json()) // allow reading JSON data from req.body
 server.use(express.urlencoded({ extended: false }))
 server.use(express.static(path.join(__dirname, 'public'))) // use the "public" folder
+server.use(session({
+    secret: process.env.SESSION_SECRET || 'dev-session-secret',
+    resave: false,
+    saveUninitialized: false
+}))
+server.use(passport.initialize())
+server.use(passport.session())
 server.set("view engine", "ejs")
 server.set('views', path.join(__dirname, 'views'))
 
@@ -61,6 +71,13 @@ server.use('/drivers', driversRouter)
 server.use('/teams', teamsRouter)
 server.use('/circuits', circuitsRouter)
 server.use('/races', racesRouter)
+server.use('/login', authRouter)
+
+// render the home page
+server.get('/', async (req, res) => {
+    res.render('home', { currentUser: req.user })
+    return
+})
 
 // Determine the port for the server
 const port = process.env.PORT || '3000'

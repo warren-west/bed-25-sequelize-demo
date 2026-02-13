@@ -51,6 +51,8 @@ db.Driver = require('./drivers')(sequelize)
 db.Team = require('./teams')(sequelize)
 db.Circuit = require('./circuits')(sequelize)
 db.DriverCircuit = require('./driver_circuit')(sequelize) // linking table
+db.User = require('./users')(sequelize)
+db.Role = require('./roles')(sequelize)
 
 // Set up associations
 // 1-m Teams & Drivers
@@ -60,6 +62,10 @@ db.Driver.belongsTo(db.Team)
 // m-m Drivers & Circuits
 db.Driver.belongsToMany(db.Circuit, { through: 'driver_circuits' })
 db.Circuit.belongsToMany(db.Driver, { through: 'driver_circuits' })
+
+// 1-m Role & User
+db.Role.hasMany(db.User)
+db.User.belongsTo(db.Role)
 
 console.log(db)
 

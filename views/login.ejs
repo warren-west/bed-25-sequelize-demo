@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+        }
+
+        .login-card {
+            max-width: 400px;
+            padding: 1.25rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .field {
+            margin-bottom: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        button {
+            margin-top: 0.5rem;
+            padding: 0.5rem 0.8rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('partials/navbar') %>
+
+    <div class="login-card">
+        <h1>Login</h1>
+        <form action="/login" method="POST">
+            <div class="field">
+                <label for="username">Username</label>
+                <input id="username" name="username" type="text" required>
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" required>
+            </div>
+
+            <button type="submit">Log In</button>
+        </form>
+    </div>
+</body>
+
+</html>

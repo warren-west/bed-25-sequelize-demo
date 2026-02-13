@@ -17,13 +17,15 @@
         <% }) %>
     </ul>
 
-    <div>
-        <h4>Add new team</h4>
-        <form action="/teams" method="post">
-            <label>Team name:</label>
-            <input name="teamName" type="text" placeholder="New team name...">
-            <button type="submit">Add Team</button>
-        </form>
-    </div>
+    <% if (currentUser?.roleId === 1) { %>
+        <div>
+            <h4>Add new team</h4>
+            <form action="/teams" method="post">
+                <label>Team name:</label>
+                <input name="teamName" type="text" placeholder="New team name...">
+                <button type="submit">Add Team</button>
+            </form>
+        </div>
+    <% } %>
 </body>
 </html>
