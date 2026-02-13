@@ -49,12 +49,7 @@ router.get('/', (req, res) => {
 // Logging in
 // POST /login
 router.post('/', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
-    // const { username, password } = req.body
-    // console.log(username)
-    // console.log(password)
-
-    // res.status(200).json({ message: 'Logged in successfully.', user: req.user })
-    res.redirect('/')
+    res.redirect('/') // redirect to the home page
     return
 })
 
@@ -65,9 +60,7 @@ router.post('/logout', (req, res, next) => {
         if (error) {
             return next(error)
         }
-
-        // return res.status(200).json({ message: 'Logged out successfully.' })
-        res.redirect('/')
+        res.redirect('/') // redirect to the home page
     })
 })
 

@@ -34,30 +34,46 @@ Amend the scripts in the `package.json` file if you want to enable *watching*:
 ```
 
 ## Valid endpoints
+As we've continued with this project in class, we've transitioned from the endpoints returning JSON data, to returning EJS views.
+
+### Auth
+- `GET` `/login`: Display the login page.
+- `POST` `/login`: Attempt to log in. Upon success, you will be redirected to the home page `/`.
+- `POST` `/login/logout`: Attempt to log out. Upon success, you will be redirected to the home page `/`.
+
+> - `POST` `/login/populate`: Populate the database with two **roles** and three **users**.
+>   - "ADMIN" role with ID = `1`.
+>   - "USER" role with ID = `2`.
+>   - "admin", with the role of "ADMIN" and the password "admin".
+>   - "warren" with the role of "USER" and the password "1234".
+>   - "test" with the role of "USER" and the password "1234".
+
 ### Drivers
 
-- `GET` `/drivers`: Fetch all drivers from the database.
-- `GET` `/drivers/:id`: Fetch a single drivers from the database by ID.
-- `POST` `/drivers`: Add a new driver to the database.
-- `POST` `/drivers/populate`: Populate the database "drivers" table with data.
-- `PUT` `/drivers/:id`: Update a driver details in the database by ID.
-- `DELETE` `/drivers/:id`: Delete a driver's record from the database by ID.
+- `GET` `/drivers`: Display a page with the list of drivers. *Any user*
+- `GET` `/drivers/:id`: Display a page with the details of a single driver. *Logged in users*
+- `POST` `/drivers`: Add a new driver to the database, then redirect to `/drivers`. *Only admins*
+- `POST` `/drivers/populate`: Populate the database "drivers" table with data. *Only admins*
+- `PUT` `/drivers/:id`: Update a driver details in the database by ID, then redirect to `/drivers`. *Only admins*
+- `DELETE` `/drivers/:id`: Delete a driver's record from the database by ID. *Only admins*
 
 ### Teams
 
-- `GET` `/teams`: Fetch all teams from the database.
-- `GET` `/teams/:id`: *NOT YET IMPLEMENTED*
-- `POST` `/teams`: *NOT YET IMPLEMENTED*
-- `POST` `/teams/populate`: Populate the database "teams" table with data.
-- `PUT` `/teams/:id`: *NOT YET IMPLEMENTED*
-- `DELETE` `/teams/:id`: *NOT YET IMPLEMENTED*
+- `GET` `/teams`: Display a page with the list of teams.
+- `GET` `/teams/:id`: Display a page with the details of a single team.
+- `POST` `/teams`: Add a new team to the database, then redirect to `/teams`. *Only admins*
+- `POST` `/teams/populate`: Populate the database "teams" table with data. *Only admins*
+- `PUT` `/teams/:id`: Update a team details in the database by ID, then redirect to `/teams`. *Only admins*
+- `DELETE` `/teams/:id`: Delete a team's record from the database by ID. *Only admins*
 
 ### Circuits
+
+These endpoints still return JSON data, no views implemented.
 
 - `GET` `/circuits`: Fetch all circuits from the database.
 - `GET` `/circuits/:id`: *NOT YET IMPLEMENTED*
 - `POST` `/circuits`: *NOT YET IMPLEMENTED*
-- `POST` `/circuits/populate`: Populate the database "circuits" table with data.
+- `POST` `/circuits/populate`: Populate the database "circuits" table with data. *Only admins*
 - `PUT` `/circuits/:id`: *NOT YET IMPLEMENTED*
 - `DELETE` `/circuits/:id`: *NOT YET IMPLEMENTED*
 
